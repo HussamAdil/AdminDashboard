@@ -29576,3 +29576,15 @@ readers do not read off random characters that represent icons */
   font-family: "Font Awesome 5 Brands";
 }
 
+.router-link-active,
+.nav-pills .nav-link:not(.active):hover {
+  color: #fff !important;
+  background-color: #007bff;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item.menu-open > .nav-link,
+.sidebar-dark-primary .nav-sidebar > .nav-item:hover > .nav-link {
+  background: none;
+  color: #C2C7D0;
+}
+
