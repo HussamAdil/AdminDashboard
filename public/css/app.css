@@ -29588,3 +29588,7 @@ readers do not read off random characters that represent icons */
   color: #C2C7D0;
 }
 
+.user-panel .image {
+  margin-top: 5px;
+}
+
