@@ -2052,6 +2052,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2064,6 +2067,11 @@ __webpack_require__.r(__webpack_exports__);
         photo: ''
       })
     };
+  },
+  methods: {
+    CreateUser: function CreateUser() {
+      this.form.post('api/users');
+    }
   },
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -38562,10 +38570,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.login($event)
-                      },
-                      keydown: function($event) {
-                        return _vm.form.onKeydown($event)
+                        return _vm.CreateUser($event)
                       }
                     }
                   },
@@ -38651,6 +38656,14 @@ var render = function() {
                       { staticClass: "form-group" },
                       [
                         _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.bio,
+                              expression: "form.bio"
+                            }
+                          ],
                           staticClass: "form-control",
                           class: { "is-invalid": _vm.form.errors.has("bio") },
                           attrs: {
@@ -38658,6 +38671,15 @@ var render = function() {
                             placeholder: "bio",
                             cols: "20",
                             rows: "3"
+                          },
+                          domProps: { value: _vm.form.bio },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "bio", $event.target.value)
+                            }
                           }
                         }),
                         _vm._v(" "),
@@ -38675,13 +38697,42 @@ var render = function() {
                         _c(
                           "select",
                           {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.type,
+                                expression: "form.type"
+                              }
+                            ],
                             staticClass: "form-control",
-                            class: { "is-invalid": _vm.form.errors.has("bio") },
-                            attrs: { name: "role" }
+                            class: {
+                              "is-invalid": _vm.form.errors.has("type")
+                            },
+                            attrs: { name: "type" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
                           },
                           [
                             _c("option", { attrs: { value: "" } }, [
-                              _vm._v(" Select User Role ")
+                              _vm._v(" Select User type ")
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "admin" } }, [
@@ -38699,12 +38750,12 @@ var render = function() {
                         })
                       ],
                       1
-                    )
+                    ),
+                    _vm._v(" "),
+                    _vm._m(2)
                   ]
                 )
-              ]),
-              _vm._v(" "),
-              _vm._m(2)
+              ])
             ])
           ]
         )
@@ -38833,7 +38884,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-success ", attrs: { type: "button" } },
+        { staticClass: "btn btn-success ", attrs: { type: "submit" } },
         [_vm._v("Save ")]
       )
     ])

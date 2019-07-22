@@ -58,7 +58,9 @@
         </button>
       </div>
       <div class="modal-body">
-         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+        
+
+         <form @submit.prevent="CreateUser">
             <div class="form-group">
             <input v-model="form.name" type="text" name="name"
               placeholder="name"  class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
@@ -70,26 +72,27 @@
             <has-error :form="form" field="email"></has-error>
             </div>
            <div class="form-group">
-               <textarea  name="bio" placeholder="bio" class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"  cols="20" rows="3"></textarea>
+               <textarea v-model="form.bio" name="bio" placeholder="bio" class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"  cols="20" rows="3"></textarea>
             
             <has-error :form="form" field="bio"></has-error>
 
             </div>
              <div class="form-group">
-             <select name="role" class="form-control" :class="{ 'is-invalid': form.errors.has('role') }" >
-                 <option value=""> Select User Role </option>
+             <select  v-model="form.type" name="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" >
+                 <option value=""> Select User type </option>
                   <option value="admin"> Admin </option>
                    <option value="user"> User </option>
              </select>
             <has-error :form="form" field="role"></has-error>
             
             </div>
+                  <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success ">Save </button>
+      </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success ">Save </button>
-      </div>
+
     </div>
   </div>
 </div>
@@ -111,6 +114,12 @@
             }
         }
         ,
+        methods:{
+            CreateUser()
+            {
+                 this.form.post('api/users')
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
