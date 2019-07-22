@@ -8,6 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>AdminLTE 3 | Starter</title>
 
@@ -133,7 +134,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </ul>
   </nav>
   <!-- /.navbar -->
-
+<div id="app">
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -161,20 +162,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link  to="/dashboard" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                       <p>
                         Dashboard 
                       </p>
-                </a>
+                </router-link>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <router-link  to="/profile" class="nav-link">
                   <i class="nav-icon fas fa-user"></i>
                     <p>
                       Profile 
                     </p>
-              </a>
+              </router-link>
           </li>
         
         <li class="nav-item has-treeview menu-open">
@@ -223,8 +224,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-header">
       
       <div class="container">
-       
-       
+       <div class="row">
+
+        <router-view></router-view>
+
+       </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
@@ -244,7 +248,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </footer>
 </div>
 <!-- ./wrapper -->
-
+</div>
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
