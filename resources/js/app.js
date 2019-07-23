@@ -16,7 +16,7 @@ Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
  window.Form = Form;
-
+ var moment = require('moment');
 Vue.use(VueRouter)
 
 let routes = [
@@ -28,6 +28,14 @@ let routes = [
 let  router = new VueRouter({
     mode: 'history',
     routes // short for `routes: routes`
+  })
+  Vue.filter('capitalize', function (value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  })
+  Vue.filter('ConvertDate', function (value) {
+    return moment(value).format('M-D-Y');
   })
 
 /**

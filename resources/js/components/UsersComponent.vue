@@ -21,6 +21,8 @@
                       <th>ID</th>
                       <th>Name</th>
                       <th>Email</th>
+                       <th>Type</th>
+                        <th>Created_at </th>
                       <th>Control</th>
                      </tr>
                   </thead>
@@ -29,6 +31,8 @@
                       <td>{{ user.id}}</td>
                       <td>{{ user.name}}</td>
                       <td>{{ user.email}}</td>
+                       <td>{{ user.type | capitalize }}</td>
+                       <td>{{ user.created_at | ConvertDate }}</td>
                       <td><span class="tag tag-success">
                         <a href="#">
                              <i class="fa fa-edit">  </i> |  
