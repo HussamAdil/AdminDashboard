@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return User::latest()->paginate(5);
     }
 
     /**
@@ -30,7 +30,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required|min:6',
+        ]);
       return User::create([
           'name' => $request->name,
 

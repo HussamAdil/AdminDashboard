@@ -25,10 +25,10 @@
                      </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
+                    <tr v-for="user in users" :key="user.id">
+                      <td>{{ user.id}}</td>
+                      <td>{{ user.name}}</td>
+                      <td>{{ user.email}}</td>
                       <td><span class="tag tag-success">
                         <a href="#">
                              <i class="fa fa-edit">  </i> |  
@@ -86,6 +86,11 @@
             <has-error :form="form" field="role"></has-error>
             
             </div>
+          <div class="form-group">
+               <input type="password" v-model="form.password" name="password" placeholder="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" >
+            <has-error :form="form" field="password"></has-error>
+
+            </div>
                   <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-success ">Save </button>
@@ -103,6 +108,7 @@
     export default {
         data(){
             return {
+                users :{},
                 form: new Form({
                     name: '',
                     email: '',
@@ -115,13 +121,18 @@
         }
         ,
         methods:{
+            LoadUsers()
+            {
+                axios.get('api/users').then(( {data}) => (this.users = data.data));
+            }
+            ,
             CreateUser()
             {
                  this.form.post('api/users')
             }
         },
-        mounted() {
-            console.log('Component mounted.')
+        created() {
+            this.LoadUsers()
         }
     }
 </script>
