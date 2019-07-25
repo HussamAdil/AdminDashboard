@@ -56,7 +56,9 @@
   <div class=" modal-dialog-centered modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+        <h5 v-show="!EditMode" class="modal-title" id="exampleModalLabel">Add User</h5>
+
+        <h5 v-show="EditMode" class="modal-title" id="exampleModalLabel">Update User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -64,7 +66,7 @@
       <div class="modal-body">
         
 
-         <form @submit.prevent="CreateUser">
+         <form @submit.prevent="EditMode ? UpdateUser() : CreateUser()">
             <div class="form-group">
             <input v-model="form.name" type="text" name="name"
               placeholder="name"  class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
@@ -97,7 +99,8 @@
             </div>
                   <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-success ">Save </button>
+        <button  v-show="!EditMode" type="submit" class="btn btn-success ">Save </button>
+        <button v-show="EditMode"   type="submit" class="btn btn-success ">Update </button>
       </div>
         </form>
       </div>
@@ -113,9 +116,11 @@ import { setInterval } from 'timers';
     export default {
         data(){
             return {
+              EditMode : true ,
                 users :{},
                 form: new Form({
                     name: '',
+                    id:'',
                     email: '',
                     password: '',
                     type:'',
@@ -128,12 +133,15 @@ import { setInterval } from 'timers';
         methods:{
           NewUserModelOpen()
           {
+            this.EditMode = false
             this.form.reset();
+            
              $('#exampleModal').modal('show')
           }
           ,
            EditUserModelOpen(user)
           {
+            this.EditMode = true
              $('#exampleModal').modal('show')
             this.form.fill(user);
             
@@ -165,6 +173,23 @@ import { setInterval } from 'timers';
                  });
 
             },
+            UpdateUser()
+            {
+               this.form.put('api/users/' + this.form.id).then( () => {
+                 //success request 
+                  Swal.fire(
+                          'Updated!',
+                          '  ',
+                          'success'
+                        )
+                        $('#exampleModal').modal('hide')
+                         fire.$emit('AfterCreate');
+               }).catch(() => {
+                 //catch error
+               })
+
+            }
+            ,
             DeleteUser(userid)
             {
                     Swal.fire({
@@ -177,12 +202,12 @@ import { setInterval } from 'timers';
                     confirmButtonText: 'Yes, delete it!'
                   }).then((result) => {
                    
-                      this.form.delete('api/users/' + userid).then( () => {
+                      this.form.delete('api/users/' + this.form.id).then( () => {
                         if(result.value)
                         {
                   Swal.fire(
                           'Deleted!',
-                          'Your file has been deleted.',
+                          ' ',
                           'success'
                         )
                         fire.$emit('AfterCreate');
