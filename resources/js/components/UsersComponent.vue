@@ -8,7 +8,7 @@
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
-                      <button  data-toggle="modal" data-target="#exampleModal" class="btn btn-success"> <i class="fas fa-user-plus"></i> Add User </button>
+                      <button   @click="NewUserModelOpen" class="btn btn-success"> <i class="fas fa-user-plus"></i> Add User </button>
  
                   </div>
                 </div>
@@ -34,10 +34,10 @@
                        <td>{{ user.type | capitalize }}</td>
                        <td>{{ user.created_at | ConvertDate }}</td>
                       <td><span class="tag tag-success">
-                        <a href="#">
-                             <i class="fa fa-edit">  </i> |  
+                        <a href="#" @click="EditUserModelOpen(user)">
+                             <i class="fa fa-edit" >  </i> |  
                         </a> 
-                        <a href="#"> 
+                        <a href="#" @click="DeleteUser(user.id)"> 
                              <i class="fa fa-trash text-danger">  </i> 
                         </a>
                         </span></td>
@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { setInterval } from 'timers';
     export default {
         data(){
             return {
@@ -125,18 +126,82 @@
         }
         ,
         methods:{
+          NewUserModelOpen()
+          {
+            this.form.reset();
+             $('#exampleModal').modal('show')
+          }
+          ,
+           EditUserModelOpen(user)
+          {
+             $('#exampleModal').modal('show')
+            this.form.fill(user);
+            
+          }
+          ,
             LoadUsers()
             {
-                axios.get('api/users').then(( {data}) => (this.users = data.data));
+                this.$Progress.start()
+                      axios.get('api/users').then(( {data}) => (this.users = data.data));
+                  this.$Progress.finish()
+
             }
             ,
             CreateUser()
             {
-                 this.form.post('api/users')
+                this.$Progress.start()
+                 this.form.post('api/users').then(()=> {
+
+                 this.$Progress.finish()
+                Toast.fire({
+                type: 'success',
+                title: 'User created in successfully'
+                })
+                fire.$emit('AfterCreate');
+                $('#exampleModal').modal('hide')
+
+                 }).catch(()=>{
+                       this.$Progress.fail()
+                 });
+
+            },
+            DeleteUser(userid)
+            {
+                    Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                  }).then((result) => {
+                   
+                      this.form.delete('api/users/' + userid).then( () => {
+                        if(result.value)
+                        {
+                  Swal.fire(
+                          'Deleted!',
+                          'Your file has been deleted.',
+                          'success'
+                        )
+                        fire.$emit('AfterCreate');
+                        }
+                         
+                         
+                      }).catch( () => {
+                        Swal("failed!", "error" ,"warning");
+                      });
+                    
+                  });
             }
         },
         created() {
-            this.LoadUsers()
+            this.LoadUsers();
+            fire.$on('AfterCreate' , () => {
+                this.LoadUsers() 
+            })
+           // setInterval(() => this.LoadUsers() , 3000)
         }
     }
 </script>
